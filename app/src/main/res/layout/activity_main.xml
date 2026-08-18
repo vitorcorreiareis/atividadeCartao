@@ -5,8 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#121212">
+    <!-- Fundo escuro (dark mode) da tela inteira -->
 
-    <!-- CARTÃO (ViewFlipper com frente e verso) -->
+    <!-- ============================================= -->
+    <!-- CARTÃO VIRTUAL: ViewFlipper alterna entre a
+         frente e o verso do cartão (efeito de "virar") -->
+    <!-- ============================================= -->
     <ViewFlipper
         android:id="@+id/cardFlipper"
         android:layout_width="0dp"
@@ -19,8 +23,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <!-- inAnimation/outAnimation: animações customizadas que precisam
+             existir em res/anim/. showNext()/showPrevious() no código Kotlin/Java
+             disparam a troca entre os dois filhos abaixo -->
 
-        <!-- FRENTE DO CARTÃO -->
+        <!-- ========== FRENTE DO CARTÃO (índice 0 do ViewFlipper) ========== -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardFront"
             android:layout_width="match_parent"
@@ -28,13 +35,15 @@
             app:cardBackgroundColor="#FFF200"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp">
+            <!-- Amarelo simulando o cartão físico Ourocard;
+                 cardElevation dá a sombra de profundidade -->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="20dp">
 
-                <!-- Nome do banco -->
+                <!-- Nome do banco, alinhado no canto superior direito -->
                 <TextView
                     android:id="@+id/tvBankName"
                     android:layout_width="wrap_content"
@@ -46,7 +55,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Chip -->
+                <!-- Ícone do chip do cartão, abaixo do nome do banco -->
                 <ImageView
                     android:id="@+id/imgChip"
                     android:layout_width="40dp"
@@ -57,7 +66,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvBankName" />
 
-                <!-- Número do cartão -->
+                <!-- Número do cartão (será atualizado dinamicamente
+                     conforme o usuário digita no campo etNumber) -->
                 <TextView
                     android:id="@+id/tvCardNumber"
                     android:layout_width="wrap_content"
@@ -71,7 +81,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/imgChip" />
 
-                <!-- Nome do titular -->
+                <!-- Nome do titular, fixado no canto inferior esquerdo -->
                 <TextView
                     android:id="@+id/tvCardName"
                     android:layout_width="wrap_content"
@@ -84,7 +94,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <!-- Logo da bandeira -->
+                <!-- Logo da bandeira (Visa/Master/Elo etc.), sem src fixo:
+                     precisa ser setado via código conforme o número digitado -->
                 <ImageView
                     android:id="@+id/imgBrandLogo"
                     android:layout_width="56dp"
@@ -97,7 +108,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- VERSO DO CARTÃO -->
+        <!-- ========== VERSO DO CARTÃO (índice 1 do ViewFlipper) ========== -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardBack"
             android:layout_width="match_parent"
@@ -110,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <!-- Tarja magnética -->
+                <!-- Tarja magnética preta, típica do verso de um cartão -->
                 <View
                     android:id="@+id/magneticStripe"
                     android:layout_width="match_parent"
@@ -121,6 +132,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
+                <!-- Rótulo "VALIDADE" -->
                 <TextView
                     android:id="@+id/lblExpiry"
                     android:layout_width="wrap_content"
@@ -134,6 +146,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/magneticStripe" />
 
+                <!-- Valor da validade (MM/AA), atualizado a partir de etExpiry -->
                 <TextView
                     android:id="@+id/tvCardExpiry"
                     android:layout_width="wrap_content"
@@ -147,6 +160,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lblExpiry" />
 
+                <!-- Rótulo "CVV" -->
                 <TextView
                     android:id="@+id/lblCVV"
                     android:layout_width="wrap_content"
@@ -160,6 +174,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvCardExpiry" />
 
+                <!-- Valor do CVV, atualizado a partir de etCVV -->
                 <TextView
                     android:id="@+id/tvCardCVV"
                     android:layout_width="wrap_content"
@@ -178,7 +193,10 @@
 
     </ViewFlipper>
 
-    <!-- FORMULÁRIO -->
+    <!-- ============================================= -->
+    <!-- FORMULÁRIO: dentro de ScrollView para não cortar
+         campos em telas menores ou com teclado aberto -->
+    <!-- ============================================= -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -189,6 +207,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+        <!-- Preenche todo o espaço restante abaixo do cartão (0dp + constraints) -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -196,7 +215,7 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
-            <!-- Label + Número do Cartão -->
+            <!-- Label acima do campo "Número do Cartão" -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -206,6 +225,8 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
 
+            <!-- Campo de número do cartão: numérico, limitado a 19 caracteres
+                 (16 dígitos + 3 espaços no formato 0000 0000 0000 0000) -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:id="@+id/tilNumber"
@@ -215,6 +236,8 @@
                 app:boxStrokeColor="#7C4DFF"
                 app:boxBackgroundColor="#1E1E1E"
                 app:hintEnabled="false">
+                <!-- hintEnabled=false porque já existe um TextView de label acima;
+                     o "hint" do EditText abaixo funciona só como placeholder -->
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNumber"
@@ -229,7 +252,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Label + Nome do Titular -->
+            <!-- Label acima do campo "Nome do Titular" -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -239,6 +262,8 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
 
+            <!-- Campo de nome: textCapCharacters força exibição em
+                 CAIXA ALTA enquanto digita (padrão visual de cartão físico) -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:id="@+id/tilName"
@@ -261,7 +286,8 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Labels Validade e CVV -->
+            <!-- Linha com os dois labels "Validade" e "CVV" lado a lado,
+                 cada um ocupando 50% da largura (weightSum="2") -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -291,7 +317,7 @@
 
             </LinearLayout>
 
-            <!-- Campos Validade e CVV -->
+            <!-- Linha com os campos de Validade e CVV, também 50/50 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -299,6 +325,7 @@
                 android:orientation="horizontal"
                 android:weightSum="2">
 
+                <!-- Campo Validade: numérico, limitado a 5 chars (MM/AA) -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:id="@+id/tilExpiry"
@@ -323,6 +350,8 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Campo CVV: numberPassword esconde os dígitos digitados
+                     (mostra pontos), limitado a 3 caracteres -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:id="@+id/tilCVV"
@@ -349,7 +378,8 @@
 
             </LinearLayout>
 
-            <!-- Botão Finalizar -->
+            <!-- Botão final: dispara a lógica de validação/processamento
+                 do pagamento no código Kotlin/Java (setOnClickListener) -->
             <Button
                 android:id="@+id/btnProcess"
                 android:layout_width="match_parent"
