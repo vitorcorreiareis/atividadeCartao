@@ -5,101 +5,109 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#121212">
-    <!-- Fundo escuro (dark mode) da tela inteira -->
 
     <!-- ============================================= -->
     <!-- CARTÃO VIRTUAL: ViewFlipper alterna entre a
-         frente e o verso do cartão (efeito de "virar") -->
+         frente e o verso do cartão (efeito de "virar").
+
+         layout_constraintDimensionRatio="1.586:1" mantém a
+         proporção real de um cartão físico (85.6mm x 53.98mm)
+         em qualquer largura de tela, em vez de altura fixa. -->
     <!-- ============================================= -->
     <ViewFlipper
         android:id="@+id/cardFlipper"
         android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="32dp"
         android:inAnimation="@anim/in_from_right"
         android:outAnimation="@anim/out_to_left"
+        app:layout_constraintDimensionRatio="1.586:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <!-- inAnimation/outAnimation: animações customizadas que precisam
-             existir em res/anim/. showNext()/showPrevious() no código Kotlin/Java
-             disparam a troca entre os dois filhos abaixo -->
 
-        <!-- ========== FRENTE DO CARTÃO (índice 0 do ViewFlipper) ========== -->
+        <!-- ========== FRENTE DO CARTÃO (índice 0) ========== -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardFront"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardBackgroundColor="#FFF200"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="8dp">
-            <!-- Amarelo simulando o cartão físico Ourocard;
-                 cardElevation dá a sombra de profundidade -->
+            app:cardBackgroundColor="#FFC700"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="16dp">
+            <!-- Amarelo mais saturado (#FFC700 no lugar de #FFF200)
+                 e elevação maior (16dp) dão mais destaque ao cartão -->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="20dp">
+                android:padding="24dp">
 
-                <!-- Nome do banco, alinhado no canto superior direito -->
                 <TextView
                     android:id="@+id/tvBankName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ourocard"
-                    android:textColor="#003399"
-                    android:textSize="20sp"
+                    android:textColor="#1A1A4D"
+                    android:textSize="22sp"
                     android:textStyle="bold"
+                    android:letterSpacing="0.02"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Ícone do chip do cartão, abaixo do nome do banco -->
                 <ImageView
                     android:id="@+id/imgChip"
-                    android:layout_width="40dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_width="44dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="20dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/chip"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvBankName" />
 
-                <!-- Número do cartão (será atualizado dinamicamente
-                     conforme o usuário digita no campo etNumber) -->
+                <!-- Fonte monoespaçada dá aparência mais "gravada",
+                     e os bullets "••••" substituem os asteriscos "****"
+                     do original — mais próximo do padrão real de cartões -->
                 <TextView
                     android:id="@+id/tvCardNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="**** **** **** ****"
-                    android:textColor="#003399"
-                    android:textSize="16sp"
+                    android:layout_marginTop="16dp"
+                    android:text="•••• •••• •••• ••••"
+                    android:textColor="#1A1A4D"
+                    android:textSize="19sp"
                     android:textStyle="bold"
-                    android:letterSpacing="0.1"
+                    android:fontFamily="monospace"
+                    android:letterSpacing="0.15"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/imgChip" />
 
-                <!-- Nome do titular, fixado no canto inferior esquerdo -->
+                <!-- layout_width="0dp" + marginEnd + maxLines + ellipsize:
+                     evita que um nome comprido invada o espaço do logo
+                     da bandeira no canto inferior direito -->
                 <TextView
                     android:id="@+id/tvCardName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="64dp"
                     android:text="NOME DO TITULAR"
-                    android:textColor="#003399"
-                    android:textSize="13sp"
+                    android:textColor="#1A1A4D"
+                    android:textSize="14sp"
                     android:textStyle="bold"
+                    android:letterSpacing="0.03"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <!-- Logo da bandeira (Visa/Master/Elo etc.), sem src fixo:
-                     precisa ser setado via código conforme o número digitado -->
+                <!-- Logo da bandeira, sem src fixo: setado via código
+                     conforme o número digitado (ver MainActivity.kt) -->
                 <ImageView
                     android:id="@+id/imgBrandLogo"
-                    android:layout_width="56dp"
-                    android:layout_height="36dp"
+                    android:layout_width="60dp"
+                    android:layout_height="38dp"
                     android:layout_marginBottom="4dp"
                     android:scaleType="fitCenter"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -108,45 +116,56 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- ========== VERSO DO CARTÃO (índice 1 do ViewFlipper) ========== -->
+        <!-- ========== VERSO DO CARTÃO (índice 1) ========== -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardBack"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardBackgroundColor="#FFF200"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="8dp">
+            app:cardBackgroundColor="#FFC700"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="16dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <!-- Tarja magnética preta, típica do verso de um cartão -->
                 <View
                     android:id="@+id/magneticStripe"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="20dp"
-                    android:background="#333333"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="24dp"
+                    android:background="#1A1A1A"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-                <!-- Rótulo "VALIDADE" -->
+                <!-- Faixa de assinatura: detalhe que o original não tinha,
+                     reforça a sensação de verso de cartão real -->
+                <View
+                    android:id="@+id/signatureStripe"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="20dp"
+                    android:background="#F0EDE5"
+                    app:layout_constraintTop_toBottomOf="@id/magneticStripe"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent="0.55" />
+
                 <TextView
                     android:id="@+id/lblExpiry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginTop="16dp"
                     android:text="VALIDADE"
-                    android:textColor="#003399"
-                    android:textSize="9sp"
+                    android:textColor="#1A1A4D"
+                    android:textSize="10sp"
                     android:textStyle="bold"
+                    android:letterSpacing="0.05"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/magneticStripe" />
+                    app:layout_constraintTop_toBottomOf="@id/signatureStripe" />
 
-                <!-- Valor da validade (MM/AA), atualizado a partir de etExpiry -->
                 <TextView
                     android:id="@+id/tvCardExpiry"
                     android:layout_width="wrap_content"
@@ -154,37 +173,38 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="2dp"
                     android:text="MM/AA"
-                    android:textColor="#003399"
-                    android:textSize="14sp"
+                    android:textColor="#1A1A4D"
+                    android:textSize="15sp"
                     android:textStyle="bold"
+                    android:fontFamily="monospace"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lblExpiry" />
 
-                <!-- Rótulo "CVV" -->
                 <TextView
                     android:id="@+id/lblCVV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="12dp"
                     android:text="CVV"
-                    android:textColor="#003399"
-                    android:textSize="9sp"
+                    android:textColor="#1A1A4D"
+                    android:textSize="10sp"
                     android:textStyle="bold"
+                    android:letterSpacing="0.05"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvCardExpiry" />
 
-                <!-- Valor do CVV, atualizado a partir de etCVV -->
                 <TextView
                     android:id="@+id/tvCardCVV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="2dp"
-                    android:text="***"
-                    android:textColor="#003399"
-                    android:textSize="16sp"
+                    android:text="•••"
+                    android:textColor="#1A1A4D"
+                    android:textSize="17sp"
                     android:textStyle="bold"
+                    android:fontFamily="monospace"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lblCVV" />
 
@@ -200,14 +220,13 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintTop_toBottomOf="@id/cardFlipper"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        <!-- Preenche todo o espaço restante abaixo do cartão (0dp + constraints) -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -215,7 +234,6 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
-            <!-- Label acima do campo "Número do Cartão" -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -223,21 +241,26 @@
                 android:textColor="#FFFFFF"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                android:letterSpacing="0.02"
+                android:layout_marginBottom="6dp" />
 
-            <!-- Campo de número do cartão: numérico, limitado a 19 caracteres
-                 (16 dígitos + 3 espaços no formato 0000 0000 0000 0000) -->
+            <!-- boxCornerRadius arredondado (12dp) em vez de reto:
+                 combina com o resto do design (cartão, botão), sem
+                 precisar de nenhum drawable extra -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:id="@+id/tilNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="18dp"
                 app:boxStrokeColor="#7C4DFF"
+                app:boxStrokeWidthFocused="2dp"
                 app:boxBackgroundColor="#1E1E1E"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
                 app:hintEnabled="false">
-                <!-- hintEnabled=false porque já existe um TextView de label acima;
-                     o "hint" do EditText abaixo funciona só como placeholder -->
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNumber"
@@ -248,11 +271,12 @@
                     android:maxLength="19"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#888888"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Label acima do campo "Nome do Titular" -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -260,18 +284,22 @@
                 android:textColor="#FFFFFF"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                android:letterSpacing="0.02"
+                android:layout_marginBottom="6dp" />
 
-            <!-- Campo de nome: textCapCharacters força exibição em
-                 CAIXA ALTA enquanto digita (padrão visual de cartão físico) -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:id="@+id/tilName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="18dp"
                 app:boxStrokeColor="#7C4DFF"
+                app:boxStrokeWidthFocused="2dp"
                 app:boxBackgroundColor="#1E1E1E"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
                 app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -282,17 +310,17 @@
                     android:inputType="textCapCharacters"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#888888"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Linha com os dois labels "Validade" e "CVV" lado a lado,
-                 cada um ocupando 50% da largura (weightSum="2") -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="6dp"
                 android:weightSum="2">
 
                 <TextView
@@ -303,7 +331,8 @@
                     android:text="Validade"
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:letterSpacing="0.02" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -313,19 +342,18 @@
                     android:text="CVV"
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:letterSpacing="0.02" />
 
             </LinearLayout>
 
-            <!-- Linha com os campos de Validade e CVV, também 50/50 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="28dp"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
-                <!-- Campo Validade: numérico, limitado a 5 chars (MM/AA) -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:id="@+id/tilExpiry"
@@ -334,7 +362,12 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     app:boxStrokeColor="#7C4DFF"
+                    app:boxStrokeWidthFocused="2dp"
                     app:boxBackgroundColor="#1E1E1E"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
                     app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -346,12 +379,12 @@
                         android:maxLength="5"
                         android:textColor="#FFFFFF"
                         android:textColorHint="#888888"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Campo CVV: numberPassword esconde os dígitos digitados
-                     (mostra pontos), limitado a 3 caracteres -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:id="@+id/tilCVV"
@@ -360,7 +393,12 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     app:boxStrokeColor="#7C4DFF"
+                    app:boxStrokeWidthFocused="2dp"
                     app:boxBackgroundColor="#1E1E1E"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
                     app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -372,23 +410,32 @@
                         android:maxLength="3"
                         android:textColor="#FFFFFF"
                         android:textColorHint="#888888"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
-            <!-- Botão final: dispara a lógica de validação/processamento
-                 do pagamento no código Kotlin/Java (setOnClickListener) -->
-            <Button
+            <!-- MaterialButton (não Button comum) porque suporta
+                 app:cornerRadius direto por atributo, sem precisar de
+                 nenhum drawable de fundo customizado. A biblioteca
+                 Material já está no projeto (é a mesma usada pelo
+                 TextInputLayout acima), então isso não exige nenhuma
+                 dependência nova nem arquivo novo. -->
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnProcess"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="58dp"
                 android:backgroundTint="#7C4DFF"
                 android:text="FINALIZAR PAGAMENTO"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:letterSpacing="0.03"
+                app:cornerRadius="14dp"
+                app:elevation="6dp" />
 
         </LinearLayout>
     </ScrollView>
