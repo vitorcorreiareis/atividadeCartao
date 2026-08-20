@@ -1,4 +1,4 @@
-# 💳 AtividadeDSCartão
+# 💳 Atividade Cartão
 
 Aplicativo Android desenvolvido em Kotlin como atividade avaliativa da disciplina de **Programação Para Dispositivos Móveis**.
 
