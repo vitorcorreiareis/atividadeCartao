@@ -11,36 +11,41 @@ Simulação de uma interface de cartão de crédito com visualização em tempo 
 - Exibição dinâmica do número do cartão com máscara automática (blocos de 4 dígitos)
 - Atualização em tempo real do nome do titular
 - Máscara automática de validade no formato MM/AA
-- Animação de flip do cartão ao focar nos campos de Validade e CVV
-- Identificação automática da bandeira (Visa / Mastercard) com troca de cor e logo
-- Validação dos campos antes de finalizar o pagamento
+- Animação de flip do cartão ao focar no campo CVV (retorna à frente ao focar nos demais campos)
+- Identificação automática da bandeira (Visa / Mastercard / Outra) com troca de cor e logotipo
+- Validação dos campos antes de liberar o processamento
 
 ## 🛠️ Tecnologias Utilizadas
 
 - Kotlin
 - ConstraintLayout
 - CardView
-- ViewFlipper
+- ObjectAnimator (rotationY) para a animação de flip
 - Material Components (TextInputLayout)
 - TextWatcher para máscaras em tempo real
 
 ## 🚀 Como Rodar
 
 1. Clone o repositório
-2. Abra no Android Studio
+2. Abra no Android Studio (**Empty Views Activity**, não Compose)
 3. Sincronize o Gradle
-4. Rode em um dispositivo físico ou emulador com API 24+
+4. Rode em um dispositivo físico ou emulador com API 23+
 
 ## 📋 Validações
 
 - Número do cartão deve ter 16 dígitos
 - Nome do titular deve ter ao menos 3 caracteres
-- Validade deve seguir o padrão MM/AA
-- CVV deve ter 3 dígitos
+- Validade segue o padrão MM/AA (aplicado via máscara)
+- CVV limitado a 3 dígitos (aplicado via `maxLength` no campo)
 
-<img width="407" height="678" alt="image" src="https://github.com/user-attachments/assets/43c26da6-71af-488c-a1ac-e14837440047" />
+## ⚠️ Observações técnicas
 
+- O componente `CardFlipper` citado originalmente na atividade não existe no SDK do Android/AndroidX. O efeito de giro foi implementado manualmente com duas `CardView` sobrepostas animadas via `ObjectAnimator`.
+- O "logotipo" da bandeira é um texto estilizado, não uma imagem — os logos oficiais de Visa/Mastercard são marca registrada.
+
+<!-- Substitua pela URL do seu próprio screenshot antes de publicar -->
+![Screenshot do app](./screenshot.png)
 
 ## 👨‍💻 Autor
 
-Desenvolvido por **Arthur Xavier** 
+Desenvolvido por **Vitor Augusto Correia dos Reis**
