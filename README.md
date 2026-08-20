@@ -44,7 +44,7 @@ Simulação de uma interface de cartão de crédito com visualização em tempo 
 - O "logotipo" da bandeira é um texto estilizado, não uma imagem — os logos oficiais de Visa/Mastercard são marca registrada.
 
 <!-- Substitua pela URL do seu próprio screenshot antes de publicar -->
-![Screenshot do app](./screenshot.png)
+
 
 ## 👨‍💻 Autor
 
